@@ -1,0 +1,5 @@
+#include <std> // Include stuff from the standard library.
+
+.string: "Hello world!\n" // Create a string.
+
+print(string) // Use one of the std functions to print it out!
