@@ -1,4 +1,4 @@
-OBJECTS=main.o util.o opcodes.o
+OBJECTS=main.o util.o opcodes.o label.o
 EXECUTABLE=bopc
 
 $(EXECUTABLE): $(OBJECTS)
@@ -6,7 +6,7 @@ $(EXECUTABLE): $(OBJECTS)
 	rm $(OBJECTS)
 	mv bopc ../
 
-main.o: util.o opcodes.o src/main.c
+main.o: $(OBJECTS) src/main.c
 	cc -c src/main.c
 
 util.o: src/util.c
@@ -14,3 +14,6 @@ util.o: src/util.c
 
 opcodes.o: src/opcodes.c
 	cc -c src/opcodes.c
+
+label.o: src/label.c
+	cc -c src/label.c

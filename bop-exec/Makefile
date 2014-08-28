@@ -1,4 +1,4 @@
-OBJECTS=main.o
+OBJECTS=main.o opcodes.o
 EXECUTABLE=bop
 
 $(EXECUTABLE): $(OBJECTS)
@@ -6,5 +6,8 @@ $(EXECUTABLE): $(OBJECTS)
 	rm main.o
 	mv bop ../
 
-main.o: src/main.c
+main.o: $(OBJECTS) src/main.c
 	cc -c src/main.c
+
+opcodes.o: src/opcodes.c
+	cc -c src/opcodes.c
