@@ -8,4 +8,6 @@
 
 char* trim(char* string);
 
+char* substr(char* string, int begin, int end);
+
 #endif /* UTIL_H */

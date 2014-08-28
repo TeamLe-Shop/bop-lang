@@ -1,6 +1,8 @@
 #include "util.h"
 #include "opcodes.h"
+
 #include <stdio.h>
+#include <stdlib.h>
 
 char* trim(char* string)
 {
@@ -13,4 +15,10 @@ char* trim(char* string)
         end--;
     }
     return string;
+}
+
+char* substr(char* string, int begin, int end)
+{
+    char* new_str = malloc(strlen(string + begin - end));
+    memcpy(new_str, string + begin, strlen(string + begin - end));
 }

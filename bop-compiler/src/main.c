@@ -10,6 +10,8 @@
 
 void do_print(char* line, int line_num, FILE* output);
 
+void read(FILE* input, FILE* output, int ln);
+
 int main(int argc, char* argv[])
 {
 	if (argc < 3) {
@@ -21,28 +23,11 @@ int main(int argc, char* argv[])
     FILE* input = fopen(argv[1], "r");
     FILE* output = fopen(argv[2], "w");
 
-    /* Hur labels? */
-    struct Label* labels;
-    size_t label_count;
-
     /* Current line */
-    char* line = malloc(LINE_SIZE);
     int line_number = 1;
 
-    while (fgets(line, LINE_SIZE, input)) {
-        line[strlen(line)] = 0;
-        line = trim(line);
+    read(input, output, line_number);
 
-        if (ends(line, ":")) {
-            printf("(LABEL) %s\n", line);
-        } else {
-            if (starts(line, "print")) {
-                putc(OP_PRINT, output);
-                do_print(trim(line + 6), line_number, output);
-            }
-        }
-        line_number++;
-    }
     return 0;
 }
 
@@ -63,8 +48,9 @@ void do_print(char* line, int line_num, FILE* output)
                 case '\\': putc('\\', output); break;
                 default:
                     printf("Error on Line %d: Unsupported escape character (\\%c)",
-                        line_num, *(c+1));
+                           line_num, *(c+1));
                 }
+                i++;
             } else {
                 putc(*c, output);
             }
@@ -73,4 +59,33 @@ void do_print(char* line, int line_num, FILE* output)
     putc('\0', output);
 }
 
+void read(FILE* input, FILE* output, int line_number)
+{
+    Label** labels = malloc(sizeof(Label*) * 5);
+    size_t label_count;
 
+    char* line = malloc(LINE_SIZE);
+    while (fgets(line, LINE_SIZE, input)) {
+        line[strlen(line)] = 0;
+        line = trim(line);
+
+        if (ends(line, ":")) {
+            labels[label_count] = Label_New(substr(line, 0, 1), 0);
+            printf("help\n");
+            printf("(LABEL) %s at pos %zu",
+                    labels[label_count]->name,
+                    labels[label_count]->position);
+        } else {
+            if (starts(line, "print")) {
+                putc(OP_PRINT, output);
+                do_print(trim(line + 6), line_number, output);
+            } else if (starts(line, "goto")) { // The most fun part of bop!
+                find_label(labels, line + 5);
+            }
+        }
+        line_number++;
+    }
+
+
+    free(labels);
+}
