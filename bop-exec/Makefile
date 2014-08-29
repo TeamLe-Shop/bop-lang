@@ -3,7 +3,7 @@ EXECUTABLE=bop
 
 $(EXECUTABLE): $(OBJECTS)
 	cc $(OBJECTS) -o $(EXECUTABLE)
-	rm main.o
+	rm $(OBJECTS)
 	mv bop ../
 
 main.o: $(OBJECTS) src/main.c
