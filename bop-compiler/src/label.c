@@ -3,24 +3,22 @@
 #include <string.h>
 #include <stdio.h>
 
-Label* Label_New(char* name, size_t pos)
+Label Label_New(char* name, size_t pos)
 {
-    Label* new = malloc(sizeof(Label));
-    new->name = malloc(strlen(name));
-    strcpy(new->name, name);
-    new->position = pos;
+    Label new = {pos, name};
     return new;
 }
 
-Label* find_label(Label** list, char* name)
+Label find_label(Label* list, char* name)
 {
     int i;
-    Label* label;
-    for (i = 0; i < sizeof(list) / sizeof (Label*); i++) {
+    // Default label? dunno
+    Label label = {0, "begin"};
+    for (i = 0; i < 5; i++) {
         label = list[i];
-        if (!strcmp(label->name, name)) {
+        if (strcmp(label.name, name) == 0) {
             return label;
         }
     }
-    return NULL;
+    return label;
 }

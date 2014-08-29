@@ -12,6 +12,10 @@ void do_print(char* line, int line_num, FILE* output);
 
 void read(FILE* input, FILE* output, int ln);
 
+void put(char c, FILE* output);
+
+int bytes_written = 0;
+
 int main(int argc, char* argv[])
 {
 	if (argc < 3) {
@@ -41,27 +45,27 @@ void do_print(char* line, int line_num, FILE* output)
         if (mode) {
             if (*c == '\\') {
                 switch (*(c+1)) {
-                case 'n': putc('\n', output); break;
-                case 't': putc('\t', output); break;
-                case 'r': putc('\r', output); break;
-                case 'a': putc('\a', output); break;
-                case '\\': putc('\\', output); break;
+                case 'n': put('\n', output); break;
+                case 't': put('\t', output); break;
+                case 'r': put('\r', output); break;
+                case 'a': put('\a', output); break;
+                case '\\': put('\\', output); break;
                 default:
                     printf("Error on Line %d: Unsupported escape character (\\%c)",
                            line_num, *(c+1));
                 }
                 i++;
             } else {
-                putc(*c, output);
+                put(*c, output);
             }
         }
     }
-    putc('\0', output);
+    put('\0', output);
 }
 
 void read(FILE* input, FILE* output, int line_number)
 {
-    Label** labels = malloc(sizeof(Label*) * 5);
+    Label labels[5];
     size_t label_count;
 
     char* line = malloc(LINE_SIZE);
@@ -71,21 +75,26 @@ void read(FILE* input, FILE* output, int line_number)
 
         if (ends(line, ":")) {
             labels[label_count] = Label_New(substr(line, 0, 1), 0);
-            printf("help\n");
-            printf("(LABEL) %s at pos %zu",
-                    labels[label_count]->name,
-                    labels[label_count]->position);
+            printf("(LABEL) %s at pos %zu\n",
+                    labels[label_count].name,
+                    labels[label_count].position);
         } else {
             if (starts(line, "print")) {
-                putc(OP_PRINT, output);
+                put(OP_PRINT, output);
                 do_print(trim(line + 6), line_number, output);
             } else if (starts(line, "goto")) { // The most fun part of bop!
-                find_label(labels, line + 5);
+                put(OP_GOTO, output);
+                line = trim(line + 5);
+                put((char) find_label(labels, line).position - bytes_written,
+                     output);
             }
         }
         line_number++;
     }
+}
 
-
-    free(labels);
+void put(char c, FILE* output)
+{
+    putc(c, output);
+    bytes_written++;
 }

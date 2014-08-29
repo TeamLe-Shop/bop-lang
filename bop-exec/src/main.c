@@ -13,6 +13,8 @@ int main(int argc, char* argv[])
     /* Files to read & write to */
     FILE* input = fopen(argv[1], "r");
 
+    fpos_t* pos = malloc(sizeof(fpos_t));
+
     char* c = malloc(1);
     while (fread(c, 1, 1, input)) {
         if (*c == OP_PRINT) {
@@ -23,7 +25,7 @@ int main(int argc, char* argv[])
             }
         } else if (*c == OP_GOTO) {
             fread(c, 1, 1, input);
-            fseek(input, *c, SEEK_CUR);
+            fseek(input, (char)*c - 1, SEEK_CUR);
         }
     }
     return 0;

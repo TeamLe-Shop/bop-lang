@@ -20,5 +20,6 @@ char* trim(char* string)
 char* substr(char* string, int begin, int end)
 {
     char* new_str = malloc(strlen(string + begin - end));
-    memcpy(new_str, string + begin, strlen(string + begin - end));
+    memcpy(new_str, string + begin, strlen(string + begin) - end);
+    return new_str;
 }
