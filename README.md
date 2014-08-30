@@ -22,8 +22,6 @@ user	0m0.000s
 sys	0m0.001s
 ```
 
-Come at me pyfags B)
-
 `print "Hello, world!"`
 
 inb4 python2
