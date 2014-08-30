@@ -3,9 +3,13 @@ bop-lang
 
 The world's first boppy programmu~ language
 
-FASTER THAN PYTHON!
+`print "Hello, world!"`
 
-its acual true
+inb4 python2
+
+fuck you
+
+its acual faster than python
 
 ```
 Desktop:bop-lang user$ time(python kik)
@@ -21,9 +25,3 @@ real	0m0.003s
 user	0m0.000s
 sys	0m0.001s
 ```
-
-`print "Hello, world!"`
-
-inb4 python2
-
-fuck you
